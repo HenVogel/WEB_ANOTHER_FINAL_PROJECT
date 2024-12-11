@@ -5,6 +5,10 @@ const restartBtn = document.getElementById("restartBtn");
 const img = document.getElementById("bird");
 const img2 = document.getElementById("pipe");
 
+// Add background music
+const backgroundMusic = new Audio("flappy_music.mp3");
+backgroundMusic.loop = true; // Ensure the music loops continuously
+
 // Game variables
 let bird = { x: 100, y: 200, width: 50, height: 42, velocity: 0 }; // Adjusted dimensions (30% wider, 20% taller)
 let gravity = 0.5;
@@ -25,6 +29,7 @@ function restartGame() {
   bird.velocity = 0;
   pipes = [];
   score = 0;
+  backgroundMusic.play(); // Resume background music
   createPipe();
   gameLoop();
 }
@@ -76,6 +81,8 @@ function update() {
   // Check if bird hits the top or bottom of the game area
   if (bird.y < 0 || bird.y + bird.height > canvas.height) {
     isGameOver = true;
+    backgroundMusic.pause(); // Pause background music
+    backgroundMusic.currentTime = 0; // Reset music to the start
     restartBtn.style.display = "block";
     return;
   }
@@ -97,6 +104,8 @@ function update() {
         (bird.y < pipe.topHeight || bird.y + bird.height > canvas.height - pipe.bottomHeight))
     ) {
       isGameOver = true;
+      backgroundMusic.pause(); // Pause background music
+      backgroundMusic.currentTime = 0; // Reset music to the start
       restartBtn.style.display = "block";
     }
   });
@@ -111,6 +120,8 @@ function update() {
   // Check for win condition (score >= 10)
   if (score >= 100) {
     isGameOver = true;
+    backgroundMusic.pause(); // Pause background music
+    backgroundMusic.currentTime = 0; // Reset music to the start
     displayWinScreen();
     return;
   }
@@ -145,5 +156,6 @@ function gameLoop() {
 
 // Start the game
 restartBtn.style.display = "none";
+backgroundMusic.play(); // Start background music
 createPipe();
 gameLoop();
